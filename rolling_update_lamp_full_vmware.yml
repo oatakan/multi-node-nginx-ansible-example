@@ -1,0 +1,11 @@
+---
+- import_playbook: lamp_infra_vmware.yml
+
+- import_playbook: lamp_rolling_update.yml
+
+- hosts: localhost
+  become: no
+  tasks:
+    - name: list all groups
+      debug:
+        var: groups
