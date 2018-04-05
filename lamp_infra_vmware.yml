@@ -7,7 +7,7 @@
 
   post_tasks:
     - debug:
-        var: instance.results
+        var: instances.results
 
     - name: add hosts to webserver group
       add_host:
