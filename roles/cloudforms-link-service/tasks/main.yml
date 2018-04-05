@@ -69,14 +69,14 @@
 
 - name: Initialize an empty list for vms
   set_fact:
-    empty_list: []
+    vms: []
 
 - debug: var=empty_list
   when: verbose
 
 - name: Append resource href to vms list
   set_fact:
-    vms: "{{ empty_list }} + [ { 'href': svc_url, 'resource': { 'href': '/api/vms/{{ item.json.resources[0].id }}' } } ]"
+    vms: "{{ vms }} + [ { 'href': svc_url, 'resource': { 'href': '/api/vms/{{ item.json.resources[0].id }}' } } ]"
   with_items: "{{ lookup_vms_output.results }}"
 
 - name: Log vms
@@ -116,6 +116,8 @@
       resources:
         - category: "{{ category }}"
           name: "{{ tag }}"
+        - category: application
+          name: lamp
     validate_certs: false
     headers:
       X-Auth-Token: "{{ manageiq.api_token }}"
@@ -127,15 +129,48 @@
   debug: var=tag_service_output
   when: verbose
 
+- name: debug vm names
+  debug:
+    var: item.json.resources[0]
+  with_items: "{{ lookup_vms_output.results }}"
+
+- name: Initialize an empty list for tagged_vms
+  set_fact:
+    tagged_vms: []
+
+- name: generate tags for webserver
+  set_fact:
+    tagged_vms: "{{ tagged_vms }} + [ { 'id': item.json.resources[0].id, 'app_name': 'webserver' } ]"
+  with_items: "{{ lookup_vms_output.results }}"
+  when: item.json.resources[0].name in groups('webserver')
+
+- name: generate tags for dbserver
+  set_fact:
+    tagged_vms: "{{ tagged_vms }} + [ { 'id': item.json.resources[0].id, 'app_name': 'dbserver' } ]"
+  with_items: "{{ lookup_vms_output.results }}"
+  when: item.json.resources[0].name in groups('dbserver')
+
+- name: generate tags for lbserver
+  set_fact:
+    tagged_vms: "{{ tagged_vms }} + [ { 'id': item.json.resources[0].id, 'app_name': 'lbserver' } ]"
+  with_items: "{{ lookup_vms_output.results }}"
+  when: item.json.resources[0].name in groups('lbserver')
+
+- name: debug tagged_vms
+  debug:
+    var: tagged_vms
+
 - name: Assign CF tag to VM
   uri:
-    url: "{{ manageiq.api_url }}/api/vms/{{ item.instance.hw_product_uuid }}/tags"
+    url: "{{ manageiq.api_url }}/api/vms/{{ item.id }}/tags"
     method: POST
     body:
       action: assign
       resources:
         - category: "{{ category }}"
           name: "{{ tag }}"
+        - category: "application"
+          name: "{{ item.app_name }}"
     body_format: json
     validate_certs: false
     headers:
@@ -143,8 +178,7 @@
       Content-Type: "application/json"
     status_code: 200
   register: assign_vmtag_output
-  with_items: "{{ instances.results }}"
-  when: item.instance is defined
+  with_items: "{{ tagged_vms }}"
 
 - name: Log assign_vmtag_output
   debug: var=assign_vmtag_output.results
