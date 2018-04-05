@@ -1,0 +1,9 @@
+- src: https://github.com/oatakan/ansible-role-ec2.git
+  version: origin/master
+
+- src: https://github.com/oatakan/ansible-role-vmware.git
+  version: origin/master
+
+- src: jdauphant.nginx
+
+- src: syncrou.manageiq-vmdb

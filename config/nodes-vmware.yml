@@ -1,0 +1,62 @@
+---
+providers:
+  vcenter:
+    datacenter: cloud
+    cluster: mylab
+    resource_pool: manageto
+
+nodes:
+  - name: nginx1
+    networks:
+    - name: mgmt
+      ip: 192.168.1.80
+      netmask: 255.255.255.0
+      gateway: 192.168.1.254
+      domain: home.ad
+      dns_servers:
+      - 192.168.1.254
+      - 8.8.4.4
+    domain: home.ad
+    dns_servers:
+    - 192.168.1.254
+    - 8.8.4.4
+    customization:
+      domain: "{{ home.ad }}"
+      dns_servers:
+      - 192.168.1.254
+      - 8.8.4.4
+    customvalues:
+      - key: role
+        value: nginx
+      - key: app_name
+        value: nginx_multi_node
+    memory: 2048
+    cpu: 1
+    template: centos74-x64-bigdisk
+  - name: nginx2
+    networks:
+    - name: mgmt
+      ip: 192.168.1.81
+      netmask: 255.255.255.0
+      gateway: 192.168.1.254
+      domain: home.ad
+      dns_servers:
+      - 192.168.1.254
+      - 8.8.4.4
+    domain: home.ad
+    dns_servers:
+    - 192.168.1.254
+    - 8.8.4.4
+    customization:
+      domain: "{{ home.ad }}"
+      dns_servers:
+      - 192.168.1.254
+      - 8.8.4.4
+    customvalues:
+      - key: role
+        value: nginx
+      - key: app_name
+        value: nginx_multi_node
+    memory: 2048
+    cpu: 1
+    template: centos74-x64-bigdisk
