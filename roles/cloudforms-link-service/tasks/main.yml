@@ -129,11 +129,6 @@
   debug: var=tag_service_output
   when: verbose
 
-- name: debug vm names
-  debug:
-    var: item.json.resources[0]
-  with_items: "{{ lookup_vms_output.results }}"
-
 - name: Initialize an empty list for tagged_vms
   set_fact:
     tagged_vms: []
@@ -155,10 +150,6 @@
     tagged_vms: "{{ tagged_vms }} + [ { 'id': '{{ item.json.resources[0].id }}', 'app_name': 'lbserver' } ]"
   with_items: "{{ lookup_vms_output.results }}"
   when: ('haproxy' in item.json.resources[0].name)
-
-- name: debug tagged_vms
-  debug:
-    var: tagged_vms
 
 - name: Assign CF tag to VM
   uri:
