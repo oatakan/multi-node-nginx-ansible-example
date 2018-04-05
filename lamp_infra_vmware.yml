@@ -12,7 +12,7 @@
         ansible_host: "{{ item.instance.hw_eth0.ipaddresses[0] }}"
         groups: tag_role_webserver,tag_app_lamp_multi_node
       with_items: "{{ instances.results }}"
-      when: ('lamp-web' in item.guest.hostname)
+      when: ('lamp-web' in item.instance.hw_name)
       changed_when: no
       tags:
         - addhost
@@ -23,7 +23,7 @@
         ansible_host: "{{ item.instance.hw_eth0.ipaddresses[0] }}"
         groups: tag_role_dbserver,tag_app_lamp_multi_node
       with_items: "{{ instances.results }}"
-      when: ('lamp-db' in item.guest.hostname)
+      when: ('lamp-db' in item.instance.hw_name)
       changed_when: no
       tags:
         - addhost
@@ -34,7 +34,7 @@
         ansible_host: "{{ item.instance.hw_eth0.ipaddresses[0] }}"
         groups: tag_role_lbserver,tag_app_lamp_multi_node
       with_items: "{{ instances.results }}"
-      when: ('lamp-haproxy' in item.guest.hostname)
+      when: ('lamp-haproxy' in item.instance.hw_name)
       changed_when: no
       tags:
         - addhost
