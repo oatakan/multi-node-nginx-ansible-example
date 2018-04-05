@@ -12,8 +12,8 @@
     manageiq_connection:
       url: "{{ manageiq.api_url }}"
       token: "{{ manageiq.api_token }}"
-      manageiq_validate_certs: no
-      force_basic_auth: false
+      manageiq_validate_certs: False
+      force_basic_auth: False
       username: ''
       password: ''
       group: ''
@@ -24,14 +24,12 @@
 - name: get a vmdb object
   manageiq_vmdb:
     href: "{{ manageiq.service }}"
-    validate_certs: no
   register: vmdb_object
 
 - name: link service via an object
   manageiq_vmdb:
     vmdb: "{{ vmdb_object }}"
     action: add_provider_vms
-    validate_certs: no
     data:
       uid_ems:
         - "{{ item.instance.hw_product_uuid }}"
