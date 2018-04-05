@@ -6,9 +6,6 @@
     - ansible-role-vmware
 
   post_tasks:
-    - debug:
-        var: instances.results
-
     - name: add hosts to webserver group
       add_host:
         name: "{{ item.invocation.module_args.name }}"

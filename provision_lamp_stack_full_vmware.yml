@@ -9,5 +9,5 @@
   vars:
     provider_id: 99000000000004
   roles:
-    - { role: syncrou.manageiq-vmdb, when: manageiq is defined }
+    - syncrou.manageiq-vmdb
     - { role: cloudforms-link-service, when: manageiq is defined }

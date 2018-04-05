@@ -13,7 +13,6 @@
       url: "{{ manageiq.api_url }}"
       token: "{{ manageiq.api_token }}"
       manageiq_validate_certs: false
-      validate_certs: false
       force_basic_auth: false
       username: ''
       password: ''
