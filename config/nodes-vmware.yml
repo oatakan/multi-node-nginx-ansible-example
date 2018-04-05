@@ -4,6 +4,7 @@ providers:
     datacenter: cloud
     cluster: mylab
     resource_pool: manageto
+    folder: redhat
 
 nodes:
   - name: nginx1
@@ -33,6 +34,8 @@ nodes:
     memory: 2048
     cpu: 1
     template: centos74-x64-bigdisk
+    snapshot_src: Linked
+    linked_clone: True
   - name: nginx2
     networks:
     - name: mgmt
@@ -60,3 +63,5 @@ nodes:
     memory: 2048
     cpu: 1
     template: centos74-x64-bigdisk
+    snapshot_src: Linked
+    linked_clone: True
