@@ -8,6 +8,7 @@
   post_tasks:
     - debug:
         var: instance.results
+
     - name: add hosts to webserver group
       add_host:
         name: "{{ item.instance.hw_name }}"
