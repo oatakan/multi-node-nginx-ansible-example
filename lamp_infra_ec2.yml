@@ -38,3 +38,12 @@
       changed_when: no
       tags:
         - addhost
+
+    - name: wait for connection
+      wait_for_connection:
+      delegate_to: "{{ item.tagged_instances[0].public_ip }}"
+      with_items: "{{ instances.results }}"
+      when: ('lamp_multi_node' in item.invocation.module_args.instance_tags.app)
+      changed_when: no
+      tags:
+        - addhost
