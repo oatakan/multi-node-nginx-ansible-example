@@ -9,6 +9,12 @@
   roles:
   - geerlingguy.nginx
 
+  post_tasks:
+    - name: create index.html from template
+      template:
+        src: index.html.j2
+        dest: /usr/share/nginx/html/index.html
+
 - hosts: tag_role_lbserver:&tag_app_lamp_multi_node
   become: yes
   vars:
@@ -31,12 +37,12 @@
       url: http://{{ inventory_hostname }}/
       return_content: yes
     register: response
-    until: 'nginx_test_message in response.content'
+    until: "'This is the sites URL' in response.content"
     retries: 10
     delay: 1
     ignore_errors: yes
 
   - name: output url
     debug:
-      msg: "application is avaible at http://{{ inventory_hostname }}/"
+      msg: "application is available at http://{{ hostvars[inventory_hostname].ansible_host }}/"
     when: response | success

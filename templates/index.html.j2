@@ -1,0 +1,17 @@
+<html>
+	<head>
+		<title>{{ html_title | default ('Multi LAMP Demo') }}</title>
+	</head>
+	<body>
+	
+		<h1>{{ html_title | default ('Multi LAMP Demo') }}</h1>
+		
+		<h3>This is the servers IP address:</h3>
+		<div>{{ hostvars[inventory_hostname].ansible_host }}</div>
+		
+		<h3>This is the sites URL</h3>
+		<div id="site_url">http://{{ inventory_hostname }}</div>
+	
+	</body>
+	
+</html>
