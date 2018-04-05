@@ -21,11 +21,6 @@ nodes:
     dns_servers:
     - 192.168.1.254
     - 8.8.4.4
-    customization:
-      domain: home.ad
-      dns_servers:
-      - 192.168.1.254
-      - 8.8.4.4
     customvalues:
       - key: role
         value: nginx
@@ -50,11 +45,6 @@ nodes:
     dns_servers:
     - 192.168.1.254
     - 8.8.4.4
-    customization:
-      domain: home.ad
-      dns_servers:
-      - 192.168.1.254
-      - 8.8.4.4
     customvalues:
       - key: role
         value: nginx
