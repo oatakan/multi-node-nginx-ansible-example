@@ -20,4 +20,4 @@
   - name: enable the server in haproxy
     command: echo "enable server habackend/{{ inventory_hostname }}" | socat stdio /var/lib/haproxy/stats
     delegate_to: "{{ item }}"
-    with_items: "{{ groups.tag_role_lbservers }}"
+    with_items: "{{ groups.tag_role_lbserver }}"
