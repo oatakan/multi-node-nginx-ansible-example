@@ -2,12 +2,6 @@
   become: no
   gather_facts: no
   tasks:
-    - debug:
-        var: groups
-
-    - debug:
-        msg: 'inventory_hostname: {{ inventory_hostname }}'
-
     - name: poweroff vm
       vmware_guest:
         hostname: "{{ lookup('env', 'VMWARE_HOST') }}"
