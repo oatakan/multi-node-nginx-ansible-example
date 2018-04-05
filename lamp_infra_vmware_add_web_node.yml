@@ -1,0 +1,40 @@
+- hosts: localhost
+  become: no
+  vars_files:
+    - config/nodes-single-web.yml
+  roles:
+    - ansible-role-vmware
+
+  post_tasks:
+    - name: add hosts to webserver group
+      add_host:
+        name: "{{ item.invocation.module_args.name }}"
+        ansible_host: "{{ item.invocation.module_args.networks[0].ip }}"
+        groups: tag_role_webserver,tag_app_lamp_multi_node
+      with_items: "{{ instances.results }}"
+      when: ('lamp-web' in item.invocation.module_args.name)
+      changed_when: no
+      tags:
+        - addhost
+
+    - name: add hosts to dbserver group
+      add_host:
+        name: "{{ item.invocation.module_args.name }}"
+        ansible_host: "{{ item.invocation.module_args.networks[0].ip }}"
+        groups: tag_role_dbserver,tag_app_lamp_multi_node
+      with_items: "{{ instances.results }}"
+      when: ('lamp-db' in item.invocation.module_args.name)
+      changed_when: no
+      tags:
+        - addhost
+
+    - name: add hosts to lbserver group
+      add_host:
+        name: "{{ item.invocation.module_args.name }}"
+        ansible_host: "{{ item.invocation.module_args.networks[0].ip }}"
+        groups: tag_role_lbserver,tag_app_lamp_multi_node
+      with_items: "{{ instances.results }}"
+      when: ('lamp-haproxy' in item.invocation.module_args.name)
+      changed_when: no
+      tags:
+        - addhost
