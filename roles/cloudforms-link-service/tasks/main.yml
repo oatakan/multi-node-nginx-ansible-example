@@ -142,19 +142,19 @@
   set_fact:
     tagged_vms: "{{ tagged_vms }} + [ { 'id': item.json.resources[0].id, 'app_name': 'webserver' } ]"
   with_items: "{{ lookup_vms_output.results }}"
-  when: item.json.resources[0].name in groups['webserver']
+  when: 'web' in item.json.resources[0].name
 
 - name: generate tags for dbserver
   set_fact:
     tagged_vms: "{{ tagged_vms }} + [ { 'id': item.json.resources[0].id, 'app_name': 'dbserver' } ]"
   with_items: "{{ lookup_vms_output.results }}"
-  when: item.json.resources[0].name in groups['dbserver']
+  when: 'db' in item.json.resources[0].name
 
 - name: generate tags for lbserver
   set_fact:
     tagged_vms: "{{ tagged_vms }} + [ { 'id': item.json.resources[0].id, 'app_name': 'lbserver' } ]"
   with_items: "{{ lookup_vms_output.results }}"
-  when: item.json.resources[0].name in groups['lbserver']
+  when: 'haproxy' in item.json.resources[0].name
 
 - name: debug tagged_vms
   debug:
