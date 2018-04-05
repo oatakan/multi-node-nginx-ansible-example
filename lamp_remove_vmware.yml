@@ -18,7 +18,8 @@
         uuid: "{{ hostvars[inventory_hostname].config.uuid }}"
         state: poweredoff
       delegate_to: 127.0.0.1
-      when: ('lamp' in inventory_hostname)
+      when: (inventory_hostname is defined and 'lamp' in inventory_hostname)
+      ignore_errors: yes
 
     - name: delete vm
       vmware_guest:
@@ -30,4 +31,5 @@
         uuid: "{{ hostvars[inventory_hostname].config.uuid }}"
         state: absent
       delegate_to: 127.0.0.1
-      when: ('lamp' in inventory_hostname)
+      when: (inventory_hostname is defined and 'lamp' in inventory_hostname)
+      ignore_errors: yes
