@@ -1,0 +1,128 @@
+---
+- name: debug manageiq object
+  debug:
+    var: manageiq
+
+- name: debug service id
+  debug:
+    msg: "manage iq service id: {{ manageiq.service }}"
+
+- name: set the manageiq connection variable
+  set_fact:
+    manageiq_connection:
+      url: "{{ manageiq.api_url }}"
+      token: "{{ manageiq.api_token }}"
+      manageiq_validate_certs: false
+      force_basic_auth: false
+      username: ''
+      password: ''
+      group: ''
+      X_MIQ_Group: ''
+      client_cert: ''
+      client_key: ''
+
+- name: get a vmdb object
+  manageiq_vmdb:
+    href: "{{ manageiq.service }}"
+  register: vmdb_object
+
+- name: link service via an object
+  manageiq_vmdb:
+    vmdb: "{{ vmdb_object }}"
+    action: add_provider_vms
+    data:
+      uid_ems:
+        - "{{ item.instance.hw_product_uuid }}"
+      provider:
+        id: "{{ provider_id }}"
+  with_items: "{{ instances.results }}"
+  when: item.instance is defined
+
+- name: Assign tag to CloudForms service "{{ category }}:{{ tag }}"
+  uri:
+    url: "{{ manageiq.api_url }}/api/{{ manageiq.service }}/tags"
+    method: POST
+    body_format: json
+    body:
+      action: assign
+      resources:
+        - category: "{{ category }}"
+          name: "{{ tag }}"
+    validate_certs: false
+    headers:
+      X-Auth-Token: "{{ manageiq.api_token }}"
+      Content-Type: "application/json"
+    status_code: 200
+  register: tag_service_output
+
+- name: Log tag_service_output
+  debug: var=tag_service_output
+  when: verbose
+
+- name: Assign CF tag to VM
+  uri:
+    url: "{{ manageiq.api_url }}/api/vms/{{ item.instance.hw_product_uuid }}/tags"
+    method: POST
+    body:
+      action: assign
+      resources:
+        - category: "{{ category }}"
+          name: "{{ tag }}"
+    body_format: json
+    validate_certs: false
+    headers:
+      X-Auth-Token: "{{ manageiq.api_token }}"
+      Content-Type: "application/json"
+    status_code: 200
+  register: assign_vmtag_output
+  with_items: "{{ instances.results }}"
+  when: item.instance is defined
+
+- name: Log assign_vmtag_output
+  debug: var=assign_vmtag_output.results
+  when: verbose
+
+- name: Lookup CloudForms userid
+  uri:
+    url: "{{ manageiq.api_url }}/api/{{ manageiq.user }}?attributes=userid"
+    method: GET
+    validate_certs: false
+    headers:
+      X-Auth-Token: "{{ manageiq.api_token }}"
+      Content-Type: "application/json"
+    status_code: 200
+  register: lookup_user_output
+
+- name: Log lookup_user_output
+  debug: var=lookup_user_output
+  when: verbose
+
+- name: Setting CloudForms userid
+  set_fact:
+    userid: "{{ lookup_user_output.json.userid }}"
+
+- name: Log userid
+  debug: var=userid
+  when: verbose
+
+- name: Assign CloudForms userid to VM
+  uri:
+    url: "{{ item.json.resources[0].href }}"
+    method: POST
+    body:
+      action: set_owner
+      resource:
+        owner: "{{ userid }}"
+    body_format: json
+    validate_certs: false
+    headers:
+      X-Auth-Token: "{{ manageiq.api_token }}"
+      Content-Type: "application/json"
+    status_code: 200
+  register: assign_cfowner_output
+  with_items: "{{ lookup_vms_output.results }}"
+
+- name: Log assign_cfowner_output
+  debug: var=assign_cfowner_output
+  when: verbose
+
