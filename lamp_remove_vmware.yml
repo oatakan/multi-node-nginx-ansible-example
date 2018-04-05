@@ -2,6 +2,12 @@
   become: no
   gather_facts: no
   tasks:
+    - debug:
+        var: groups
+
+    - debug:
+        msg: 'inventory_hostname: {{ inventory_hostname }}'
+
     - name: poweroff vm
       vmware_guest:
         hostname: "{{ lookup('env', 'VMWARE_HOST') }}"
@@ -12,7 +18,7 @@
         uuid: "{{ hostvars[inventory_hostname].config.uuid }}"
         state: poweredoff
       delegate_to: 127.0.0.1
-      when: ('lamp' in inventory_hostname) and (hostvars[inventory_hostname].config.uuid in inventory_hostname)
+      when: ('lamp' in inventory_hostname)
 
     - name: delete vm
       vmware_guest:
@@ -24,4 +30,4 @@
         uuid: "{{ hostvars[inventory_hostname].config.uuid }}"
         state: absent
       delegate_to: 127.0.0.1
-      when: ('lamp' in inventory_hostname) and (hostvars[inventory_hostname].config.uuid in inventory_hostname)
+      when: ('lamp' in inventory_hostname)
