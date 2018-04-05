@@ -10,10 +10,10 @@
   - geerlingguy.nginx
 
   post_tasks:
-    - name: create index.html from template
-      template:
-        src: index.html.j2
-        dest: /usr/share/nginx/html/index.html
+  - name: create index.html from template
+    template:
+      src: index.html.j2
+      dest: /usr/share/nginx/html/index.html
 
 - hosts: tag_role_lbserver:&tag_app_lamp_multi_node
   become: yes

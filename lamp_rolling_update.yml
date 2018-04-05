@@ -1,0 +1,23 @@
+- hosts: tag_role_webserver:&tag_app_lamp_multi_node
+  become: yes
+  serial: 1
+
+  pre_tasks:
+  - name: disable the server in haproxy
+    command: echo "disable server habackend/{{ inventory_hostname }}" | socat stdio /var/lib/haproxy/stats
+    delegate_to: "{{ item }}"
+    with_items: "{{ groups.tag_role_lbserver }}"
+
+  roles:
+  - geerlingguy.nginx
+
+  post_tasks:
+  - name: create index.html from template
+    template:
+      src: index.html.j2
+      dest: /usr/share/nginx/html/index.html
+
+  - name: enable the server in haproxy
+    command: echo "enable server habackend/{{ inventory_hostname }}" | socat stdio /var/lib/haproxy/stats
+    delegate_to: "{{ item }}"
+    with_items: "{{ groups.tag_role_lbservers }}"
