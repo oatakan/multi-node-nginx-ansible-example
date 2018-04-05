@@ -7,7 +7,7 @@ providers:
     folder: redhat
 
 nodes:
-  - name: nginx1
+  - name: lamp-db
     networks:
     - name: mgmt
       ip: 192.168.1.80
@@ -21,17 +21,22 @@ nodes:
     dns_servers:
     - 192.168.1.254
     - 8.8.4.4
+    customization:
+      domain: home.ad
+      dns_servers:
+      - 192.168.1.254
+      - 8.8.4.4
     customvalues:
-      - key: role
-        value: nginx
-      - key: app_name
-        value: nginx_multi_node
+    - key: role
+      value: dbserver
+    - key: app_name
+      value: lamp_multi_node
     memory: 2048
     cpu: 1
     template: centos74-x64-bigdisk
     snapshot_src: Linked
     linked_clone: True
-  - name: nginx2
+  - name: lamp-web1
     networks:
     - name: mgmt
       ip: 192.168.1.81
@@ -45,11 +50,74 @@ nodes:
     dns_servers:
     - 192.168.1.254
     - 8.8.4.4
+    customization:
+      domain: home.ad
+      dns_servers:
+      - 192.168.1.254
+      - 8.8.4.4
     customvalues:
-      - key: role
-        value: nginx
-      - key: app_name
-        value: nginx_multi_node
+    - key: role
+      value: webserver
+    - key: app_name
+      value: lamp_multi_node
+    memory: 2048
+    cpu: 1
+    template: centos74-x64-bigdisk
+    snapshot_src: Linked
+    linked_clone: True
+  - name: lamp-web2
+    networks:
+    - name: mgmt
+      ip: 192.168.1.82
+      netmask: 255.255.255.0
+      gateway: 192.168.1.254
+      domain: home.ad
+      dns_servers:
+      - 192.168.1.254
+      - 8.8.4.4
+    domain: home.ad
+    dns_servers:
+    - 192.168.1.254
+    - 8.8.4.4
+    customization:
+      domain: home.ad
+      dns_servers:
+      - 192.168.1.254
+      - 8.8.4.4
+    customvalues:
+    - key: role
+      value: webserver
+    - key: app_name
+      value: lamp_multi_node
+    memory: 2048
+    cpu: 1
+    template: centos74-x64-bigdisk
+    snapshot_src: Linked
+    linked_clone: True
+  - name: lamp-haproxy
+    networks:
+    - name: mgmt
+      ip: 192.168.1.83
+      netmask: 255.255.255.0
+      gateway: 192.168.1.254
+      domain: home.ad
+      dns_servers:
+      - 192.168.1.254
+      - 8.8.4.4
+    domain: home.ad
+    dns_servers:
+    - 192.168.1.254
+    - 8.8.4.4
+    customization:
+      domain: home.ad
+      dns_servers:
+      - 192.168.1.254
+      - 8.8.4.4
+    customvalues:
+    - key: role
+      value: lbserver
+    - key: app_name
+      value: lamp_multi_node
     memory: 2048
     cpu: 1
     template: centos74-x64-bigdisk

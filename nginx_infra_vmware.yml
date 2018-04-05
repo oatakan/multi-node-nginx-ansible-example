@@ -1,6 +1,0 @@
-- hosts: localhost
-  become: no
-  vars_files:
-    - config/nodes-vmware.yml
-  roles:
-    - ansible-role-vmware

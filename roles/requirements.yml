@@ -4,6 +4,10 @@
 - src: https://github.com/oatakan/ansible-role-vmware.git
   version: origin/master
 
-- src: jdauphant.nginx
+- src: geerlingguy.nginx
+
+- src: geerlingguy.mysql
+
+- src: geerlingguy.haproxy
 
 - src: syncrou.manageiq-vmdb

@@ -1,8 +1,8 @@
 ---
 nodes:
-  - name: nginx
-    role: nginx
-    app_name: nginx_multi_node
+  - name: lamp-db
+    role: dbserver
+    app_name: lamp_multi_node
     pod_name: "{{ ec2_name_prefix }}"
     instance_type: t2.micro
     #image: ami-85241def #rhel7
@@ -12,9 +12,33 @@ nodes:
         volume_type: gp2
         volume_size: 10
         delete_on_termination: true
-  - name: nginx
-    role: nginx
-    app_name: nginx_multi_node
+  - name: lamp-web1
+    role: webserver
+    app_name: lamp_multi_node
+    pod_name: "{{ ec2_name_prefix }}"
+    instance_type: t2.micro
+    #image: ami-85241def #rhel7
+    image: ami-61bbf104 #centos7
+    volumes:
+      - device_name: /dev/sda1
+        volume_type: gp2
+        volume_size: 10
+        delete_on_termination: true
+  - name: lamp-web2
+    role: webserver
+    app_name: lamp_multi_node
+    pod_name: "{{ ec2_name_prefix }}"
+    instance_type: t2.micro
+    #image: ami-85241def #rhel7
+    image: ami-61bbf104 #centos7
+    volumes:
+      - device_name: /dev/sda1
+        volume_type: gp2
+        volume_size: 10
+        delete_on_termination: true
+- name: lamp-haproxy
+    role: lbserver
+    app_name: lamp_multi_node
     pod_name: "{{ ec2_name_prefix }}"
     instance_type: t2.micro
     #image: ami-85241def #rhel7

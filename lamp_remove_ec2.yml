@@ -6,7 +6,7 @@
         region: "{{ ec2_region }}"
         filters:
           vpc-id: "{{ ec2_vpc_id }}"
-          "tag:app": nginx_multi_node
+          "tag:app": lamp_multi_node
       register: ec2_instances
 
     - name: terminate instances

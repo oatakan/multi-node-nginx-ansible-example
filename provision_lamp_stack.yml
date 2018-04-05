@@ -1,0 +1,42 @@
+---
+- hosts: tag_role_dbserver:&tag_app_lamp_multi_node
+  become: yes
+  roles:
+  - geerlingguy.mysql
+
+- hosts: tag_role_webserver:&tag_app_lamp_multi_node
+  become: yes
+  roles:
+  - geerlingguy.nginx
+
+- hosts: tag_role_lbserver:&tag_app_lamp_multi_node
+  become: yes
+  vars:
+    http_port: "{{':'}}80"
+    nginx_test_message: Welcome to nginx
+
+  pre_tasks:
+  - name: Populate backend servers
+    set_fact:
+      haproxy_backend_servers: "{{ haproxy_backend_servers|default([]) + [ {'name': hostvars[item].ansible_hostname, 'address': hostvars[item].ansible_default_ipv4.address + http_port } ] }}"
+    with_items: "{{ groups.tag_role_webserver }}"
+
+  roles:
+  - geerlingguy.haproxy
+
+  post_tasks:
+  # smoke test that haproxy is serving requests
+  - name: proper response from haproxy is received
+    uri:
+      url: http://{{ inventory_hostname }}/
+      return_content: yes
+    register: response
+    until: 'nginx_test_message in response.content'
+    retries: 10
+    delay: 1
+    ignore_errors: yes
+
+  - name: output url
+    debug:
+      msg: "application is avaible at http://{{ inventory_hostname }}/"
+    when: response | success
