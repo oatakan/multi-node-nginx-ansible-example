@@ -14,3 +14,4 @@
         region: "{{ ec2_region }}"
         state: "absent"
         instance_ids: "{{ ec2_instances.instances | map(attribute='instance_id') | list }}"
+      when: ec2_instances.instances | map(attribute='instance_id') | list | length > 0
