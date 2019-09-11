@@ -4,9 +4,9 @@
 
   pre_tasks:
   - name: disable the server in haproxy
-    command: echo "disable server habackend/{{ inventory_hostname }}" | socat stdio /var/lib/haproxy/stats
+    command: echo "disable server habackend/{{ ansible_hostname }}" | socat stdio /var/lib/haproxy/stats
     delegate_to: "{{ item }}"
-    with_items: "{{ groups.tag_role_lbserver }}"
+    with_items: "{{ groups.tag_role_lbserver | default(groups.vmware_tag_role_lbserver) }}"
 
   roles:
   - geerlingguy.nginx
@@ -18,6 +18,6 @@
       dest: /usr/share/nginx/html/index.html
 
   - name: enable the server in haproxy
-    command: echo "enable server habackend/{{ inventory_hostname }}" | socat stdio /var/lib/haproxy/stats
+    command: echo "enable server habackend/{{ ansible_hostname }}" | socat stdio /var/lib/haproxy/stats
     delegate_to: "{{ item }}"
-    with_items: "{{ groups.tag_role_lbserver }}"
+    with_items: "{{ groups.tag_role_lbserver | default(groups.vmware_tag_role_lbserver) }}"
