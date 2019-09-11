@@ -45,4 +45,4 @@
   - name: output url
     debug:
       msg: "application is available at http://{{ ansible_host }}/"
-    when: response | success
+    when: response is success
