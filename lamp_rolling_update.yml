@@ -14,11 +14,6 @@
     delegate_to: "{{ item }}"
     with_items: "{{ groups.tag_role_lbserver | default(groups.vmware_tag_role_lbserver) }}"
 
-#  - name: disable the server in haproxy
-#    command: echo "disable server habackend/{{ ansible_hostname }}" | socat stdio /var/lib/haproxy/stats
-#    delegate_to: "{{ item }}"
-#    with_items: "{{ groups.tag_role_lbserver | default(groups.vmware_tag_role_lbserver) }}"
-
   roles:
   - geerlingguy.nginx
 
@@ -37,8 +32,3 @@
       wait: yes
     delegate_to: "{{ item }}"
     with_items: "{{ groups.tag_role_lbserver | default(groups.vmware_tag_role_lbserver) }}"
-
-#  - name: enable the server in haproxy
-#    command: echo "enable server habackend/{{ ansible_hostname }}" | socat stdio /var/lib/haproxy/stats
-#    delegate_to: "{{ item }}"
-#    with_items: "{{ groups.tag_role_lbserver | default(groups.vmware_tag_role_lbserver) }}"
