@@ -1,10 +1,10 @@
 ---
-- hosts: tag_role_dbserver:&tag_app_lamp_multi_node
+- hosts: '*tag_role_dbserver'
   become: yes
   roles:
   - geerlingguy.mysql
 
-- hosts: tag_role_webserver:&tag_app_lamp_multi_node
+- hosts: '*tag_role_webserver'
   become: yes
   roles:
   - geerlingguy.nginx
@@ -15,7 +15,7 @@
       src: index.html.j2
       dest: /usr/share/nginx/html/index.html
 
-- hosts: tag_role_lbserver:&tag_app_lamp_multi_node
+- hosts: '*tag_role_lbserver'
   become: yes
   vars:
     http_port: "{{':'}}80"

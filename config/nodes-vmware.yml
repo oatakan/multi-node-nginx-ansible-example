@@ -8,6 +8,8 @@ providers:
 
 nodes:
   - name: lamp-db
+    role: dbserver
+    app_name: lamp_multi_node
     networks:
     - name: mgmt
       ip: 192.168.1.80
@@ -24,19 +26,17 @@ nodes:
     customization:
       domain: home.ad
       dns_servers:
-      - 192.168.1.254
+      - 8.8.8.8
       - 8.8.4.4
-    customvalues:
-    - key: role
-      value: dbserver
-    - key: app_name
-      value: lamp_multi_node
+      password: '{{ ansible_password | default(ansible_ssh_password) | b64encode | b64decode }}'
     memory: 2048
     cpu: 1
-    template: centos74-x64-bigdisk
+    template: centos76-x64-bigdisk_v1
     snapshot_src: Linked
     linked_clone: True
   - name: lamp-web1
+    role: webserver
+    app_name: lamp_multi_node
     networks:
     - name: mgmt
       ip: 192.168.1.81
@@ -53,19 +53,17 @@ nodes:
     customization:
       domain: home.ad
       dns_servers:
-      - 192.168.1.254
+      - 8.8.8.8
       - 8.8.4.4
-    customvalues:
-    - key: role
-      value: webserver
-    - key: app_name
-      value: lamp_multi_node
+      password: '{{ ansible_password | default(ansible_ssh_password) | b64encode | b64decode }}'
     memory: 2048
     cpu: 1
-    template: centos74-x64-bigdisk
+    template: centos76-x64-bigdisk_v1
     snapshot_src: Linked
     linked_clone: True
   - name: lamp-web2
+    role: webserver
+    app_name: lamp_multi_node
     networks:
     - name: mgmt
       ip: 192.168.1.82
@@ -82,19 +80,17 @@ nodes:
     customization:
       domain: home.ad
       dns_servers:
-      - 192.168.1.254
+      - 8.8.8.8
       - 8.8.4.4
-    customvalues:
-    - key: role
-      value: webserver
-    - key: app_name
-      value: lamp_multi_node
+      password: '{{ ansible_password | default(ansible_ssh_password) | b64encode | b64decode }}'
     memory: 2048
     cpu: 1
-    template: centos74-x64-bigdisk
+    template: centos76-x64-bigdisk_v1
     snapshot_src: Linked
     linked_clone: True
   - name: lamp-haproxy
+    role: lbserver
+    app_name: lamp_multi_node
     networks:
     - name: mgmt
       ip: 192.168.1.83
@@ -111,15 +107,11 @@ nodes:
     customization:
       domain: home.ad
       dns_servers:
-      - 192.168.1.254
+      - 8.8.8.8
       - 8.8.4.4
-    customvalues:
-    - key: role
-      value: lbserver
-    - key: app_name
-      value: lamp_multi_node
+      password: '{{ ansible_password | default(ansible_ssh_password) | b64encode | b64decode }}'
     memory: 2048
     cpu: 1
-    template: centos74-x64-bigdisk
+    template: centos76-x64-bigdisk_v1
     snapshot_src: Linked
     linked_clone: True
