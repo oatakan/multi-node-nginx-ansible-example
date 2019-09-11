@@ -34,7 +34,7 @@
   # smoke test that haproxy is serving requests
   - name: proper response from haproxy is received
     uri:
-      url: http://{{ inventory_hostname }}/
+      url: http://{{ ansible_host }}/
       return_content: yes
     register: response
     until: "'This is the sites URL' in response.content"
@@ -44,5 +44,5 @@
 
   - name: output url
     debug:
-      msg: "application is available at http://{{ hostvars[inventory_hostname].ansible_host }}/"
+      msg: "application is available at http://{{ ansible_host }}/"
     when: response | success
