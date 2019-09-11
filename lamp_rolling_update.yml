@@ -8,6 +8,7 @@
       state: disabled
       host: '{{ ansible_hostname }}'
       backend: habackend
+      socket: /var/lib/haproxy/stats
       shutdown_sessions: yes
       wait: yes
     delegate_to: "{{ item }}"
@@ -32,6 +33,7 @@
       state: enabled
       host: '{{ ansible_hostname }}'
       backend: habackend
+      socket: /var/lib/haproxy/stats
       wait: yes
     delegate_to: "{{ item }}"
     with_items: "{{ groups.tag_role_lbserver | default(groups.vmware_tag_role_lbserver) }}"
