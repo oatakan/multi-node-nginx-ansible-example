@@ -3,10 +3,20 @@
   serial: 1
 
   pre_tasks:
-  - name: disable the server in haproxy
-    command: echo "disable server habackend/{{ ansible_hostname }}" | socat stdio /var/lib/haproxy/stats
+  - name: disable backend server and drop open sessions to it
+    haproxy:
+      state: disabled
+      host: '{{ ansible_hostname }}'
+      backend: habackend
+      shutdown_sessions: yes
+      wait: yes
     delegate_to: "{{ item }}"
     with_items: "{{ groups.tag_role_lbserver | default(groups.vmware_tag_role_lbserver) }}"
+
+#  - name: disable the server in haproxy
+#    command: echo "disable server habackend/{{ ansible_hostname }}" | socat stdio /var/lib/haproxy/stats
+#    delegate_to: "{{ item }}"
+#    with_items: "{{ groups.tag_role_lbserver | default(groups.vmware_tag_role_lbserver) }}"
 
   roles:
   - geerlingguy.nginx
@@ -17,7 +27,16 @@
       src: index.html.j2
       dest: /usr/share/nginx/html/index.html
 
-  - name: enable the server in haproxy
-    command: echo "enable server habackend/{{ ansible_hostname }}" | socat stdio /var/lib/haproxy/stats
+  - name: disable backend server and drop open sessions to it
+    haproxy:
+      state: enabled
+      host: '{{ ansible_hostname }}'
+      backend: habackend
+      wait: yes
     delegate_to: "{{ item }}"
     with_items: "{{ groups.tag_role_lbserver | default(groups.vmware_tag_role_lbserver) }}"
+
+#  - name: enable the server in haproxy
+#    command: echo "enable server habackend/{{ ansible_hostname }}" | socat stdio /var/lib/haproxy/stats
+#    delegate_to: "{{ item }}"
+#    with_items: "{{ groups.tag_role_lbserver | default(groups.vmware_tag_role_lbserver) }}"
