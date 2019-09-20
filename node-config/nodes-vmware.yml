@@ -31,7 +31,7 @@ nodes:
       password: '{{ ansible_password | default(ansible_ssh_password) | b64encode | b64decode }}'
     memory: 2048
     cpu: 1
-    template: centos76-x64-bigdisk_v1
+    template: centos77-x64-bigdisk_v1
     snapshot_src: Linked
     linked_clone: True
   - name: lamp-web1
