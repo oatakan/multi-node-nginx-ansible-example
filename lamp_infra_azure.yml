@@ -1,0 +1,59 @@
+- hosts: localhost
+  become: no
+  gather_facts: no
+  vars_files:
+    - node-config/nodes-azure.yml
+  roles:
+    - ansible-role-azure
+
+  post_tasks:
+    - name: add hosts to webserver group
+      add_host:
+        name: "{{ item.ansible_facts.azure_vm.properties.networkProfile.networkInterfaces[0].properties.ipConfigurations[0].properties.publicIPAddress.properties.ipAddress }}"
+        ansible_host: "{{ item.ansible_facts.azure_vm.properties.networkProfile.networkInterfaces[0].properties.ipConfigurations[0].properties.publicIPAddress.properties.ipAddress }}"
+        ansible_user: centos
+        groups: tag_role_webserver,tag_app_lamp_multi_node
+      loop: "{{ instances.results }}"
+      when:
+        - ('lamp_multi_node' in item.ansible_facts.azure_vm.tags.app)
+        - ('webserver' in item.ansible_facts.azure_vm.tags.role)
+      changed_when: no
+      tags:
+        - addhost
+
+    - name: add hosts to dbserver group
+      add_host:
+        name: "{{ item.ansible_facts.azure_vm.properties.networkProfile.networkInterfaces[0].properties.ipConfigurations[0].properties.publicIPAddress.properties.ipAddress }}"
+        ansible_host: "{{ item.ansible_facts.azure_vm.properties.networkProfile.networkInterfaces[0].properties.ipConfigurations[0].properties.publicIPAddress.properties.ipAddress }}"
+        ansible_user: centos
+        groups: tag_role_dbserver,tag_app_lamp_multi_node
+      loop: "{{ instances.results }}"
+      when:
+        - ('lamp_multi_node' in item.ansible_facts.azure_vm.tags.app)
+        - ('dbserver' in item.ansible_facts.azure_vm.tags.role)
+      changed_when: no
+      tags:
+        - addhost
+
+    - name: add hosts to lbserver group
+      add_host:
+        name: "{{ item.ansible_facts.azure_vm.properties.networkProfile.networkInterfaces[0].properties.ipConfigurations[0].properties.publicIPAddress.properties.ipAddress }}"
+        ansible_host: "{{ item.ansible_facts.azure_vm.properties.networkProfile.networkInterfaces[0].properties.ipConfigurations[0].properties.publicIPAddress.properties.ipAddress }}"
+        ansible_user: centos
+        groups: tag_role_lbserver,tag_app_lamp_multi_node
+      loop: "{{ instances.results }}"
+      when:
+        - ('lamp_multi_node' in item.ansible_facts.azure_vm.tags.app)
+        - ('lbserver' in item.ansible_facts.azure_vm.tags.role)
+      changed_when: no
+      tags:
+        - addhost
+
+    - name: wait for connection
+      wait_for_connection:
+      delegate_to: "{{ item.ansible_facts.azure_vm.properties.networkProfile.networkInterfaces[0].properties.ipConfigurations[0].properties.publicIPAddress.properties.ipAddress }}"
+      loop: "{{ instances.results }}"
+      when: ('lamp_multi_node' in item.ansible_facts.azure_vm.tags.app)
+      changed_when: no
+      tags:
+        - addhost

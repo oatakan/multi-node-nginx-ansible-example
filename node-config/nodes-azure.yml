@@ -1,0 +1,41 @@
+---
+nodes:
+  - name: lamp-db
+    role: dbserver
+    app_name: lamp_multi_node
+    vm_size: Standard_A1_v2
+    image:
+      sku: 7.7
+      publisher: OpenLogic
+      version: latest
+      offer: CentOS
+
+  - name: lamp-web1
+    role: webserver
+    app_name: lamp_multi_node
+    vm_size: Standard_A1_v2
+    image:
+      sku: 7.7
+      publisher: OpenLogic
+      version: latest
+      offer: CentOS
+
+  - name: lamp-web2
+    role: webserver
+    app_name: lamp_multi_node
+    vm_size: Standard_A1_v2
+    image:
+      sku: 7.7
+      publisher: OpenLogic
+      version: latest
+      offer: CentOS
+
+  - name: lamp-haproxy
+    role: lbserver
+    app_name: lamp_multi_node
+    vm_size: Standard_A1_v2
+    image:
+      sku: 7.7
+      publisher: OpenLogic
+      version: latest
+      offer: CentOS

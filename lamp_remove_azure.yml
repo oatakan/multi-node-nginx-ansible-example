@@ -1,0 +1,12 @@
+- name: remove vms
+  hosts: localhost
+  gather_facts: no
+  connection: local
+  become: no
+  vars_files:
+    - node-config/nodes-azure.yml
+
+  roles:
+    - role: ansible-role-azure
+      role_action: deprovision
+      delegate_to: localhost

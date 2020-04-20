@@ -2,6 +2,6 @@
   gather_facts: no
   become: no
   vars_files:
-    - node-config/nodes-vmware.yml
+    - node-config/nodes-kubevirt.yml
   roles:
-    - ansible-role-vmware
+    - ansible-role-kubevirt

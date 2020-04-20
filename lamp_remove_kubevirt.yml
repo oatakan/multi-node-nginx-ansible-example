@@ -1,0 +1,12 @@
+- name: undeploy nodes on kubevirt
+  hosts: all
+  become: no
+  gather_facts: no
+  connection: local
+  vars_files:
+    - node-config/nodes-kubevirt.yml
+  roles:
+    - role: ansible-role-kubevirt
+      role_action: deprovision
+      delegate_to: localhost
+      run_once: yes

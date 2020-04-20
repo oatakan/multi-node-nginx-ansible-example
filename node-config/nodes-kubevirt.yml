@@ -1,0 +1,79 @@
+---
+
+nodes:
+  - name: lamp-db
+    role: dbserver
+    app_name: lamp_multi_node
+    networks:
+      - name: ovs-net-br1
+        ip: 192.168.1.80
+        netmask: 255.255.255.0
+        gateway: 192.168.1.254
+        nic_name: enp1s0
+        domain: home.ad
+        dns_servers:
+          - 192.168.1.254
+          - 8.8.4.4
+    domain: home.ad
+    memory: 2048
+    cpu: 1
+    user_name: root
+    root_password: '{{ ansible_password | default(ansible_ssh_password) | default("password") | b64encode | b64decode }}'
+    template: centos77-x64-v1
+  - name: lamp-web1
+    role: webserver
+    app_name: lamp_multi_node
+    networks:
+      - name: ovs-net-br1
+        ip: 192.168.1.81
+        netmask: 255.255.255.0
+        gateway: 192.168.1.254
+        nic_name: enp1s0
+        domain: home.ad
+        dns_servers:
+          - 192.168.1.254
+          - 8.8.4.4
+    domain: home.ad
+    memory: 2048
+    cpu: 1
+    user_name: root
+    root_password: '{{ ansible_password | default(ansible_ssh_password) | default("password") | b64encode | b64decode }}'
+    template: centos77-x64-v1
+  - name: lamp-web2
+    role: webserver
+    app_name: lamp_multi_node
+    networks:
+      - name: ovs-net-br1
+        ip: 192.168.1.82
+        netmask: 255.255.255.0
+        gateway: 192.168.1.254
+        nic_name: enp1s0
+        domain: home.ad
+        dns_servers:
+          - 192.168.1.254
+          - 8.8.4.4
+    domain: home.ad
+    memory: 2048
+    cpu: 1
+    user_name: root
+    root_password: '{{ ansible_password | default(ansible_ssh_password) | default("password") | b64encode | b64decode }}'
+    template: centos77-x64-v1
+  - name: lamp-haproxy
+    role: lbserver
+    app_name: lamp_multi_node
+    networks:
+      - name: ovs-net-br1
+        ip: 192.168.1.83
+        netmask: 255.255.255.0
+        gateway: 192.168.1.254
+        nic_name: enp1s0
+        domain: home.ad
+        dns_servers:
+          - 192.168.1.254
+          - 8.8.4.4
+    domain: home.ad
+    memory: 2048
+    cpu: 1
+    user_name: root
+    root_password: '{{ ansible_password | default(ansible_ssh_password) | default("password") | b64encode | b64decode }}'
+    template: centos77-x64-v1
