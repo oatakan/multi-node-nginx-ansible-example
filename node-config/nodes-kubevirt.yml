@@ -9,7 +9,7 @@ nodes:
         ip: 192.168.1.80
         netmask: 255.255.255.0
         gateway: 192.168.1.254
-        nic_name: enp1s0
+        nic_name: eth0
         domain: home.ad
         dns_servers:
           - 192.168.1.254
@@ -28,7 +28,7 @@ nodes:
         ip: 192.168.1.81
         netmask: 255.255.255.0
         gateway: 192.168.1.254
-        nic_name: enp1s0
+        nic_name: eth0
         domain: home.ad
         dns_servers:
           - 192.168.1.254
@@ -47,7 +47,7 @@ nodes:
         ip: 192.168.1.82
         netmask: 255.255.255.0
         gateway: 192.168.1.254
-        nic_name: enp1s0
+        nic_name: eth0
         domain: home.ad
         dns_servers:
           - 192.168.1.254
@@ -66,7 +66,7 @@ nodes:
         ip: 192.168.1.83
         netmask: 255.255.255.0
         gateway: 192.168.1.254
-        nic_name: enp1s0
+        nic_name: eth0
         domain: home.ad
         dns_servers:
           - 192.168.1.254
