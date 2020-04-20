@@ -1,5 +1,6 @@
 - hosts: localhost
   become: no
+  gather_facts: no
   vars_files:
     - node-config/nodes-ec2.yml
   roles:
@@ -10,6 +11,7 @@
       add_host:
         name: "{{ item.instances[0].public_ip_address }}"
         ansible_host: "{{ item.instances[0].public_ip_address }}"
+        ansible_user: centos
         groups: tag_role_webserver,tag_app_lamp_multi_node
       loop: "{{ instances.results }}"
       when:
@@ -23,6 +25,7 @@
       add_host:
         name: "{{ item.instances[0].public_ip_address }}"
         ansible_host: "{{ item.instances[0].public_ip_address }}"
+        ansible_user: centos
         groups: tag_role_dbserver,tag_app_lamp_multi_node
       loop: "{{ instances.results }}"
       when:
@@ -36,6 +39,7 @@
       add_host:
         name: "{{ item.instances[0].public_ip_address }}"
         ansible_host: "{{ item.instances[0].public_ip_address }}"
+        ansible_user: centos
         groups: tag_role_lbserver,tag_app_lamp_multi_node
       loop: "{{ instances.results }}"
       when:
