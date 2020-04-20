@@ -2,12 +2,3 @@
 - import_playbook: lamp_infra_vmware.yml
 
 - import_playbook: provision_lamp_stack.yml
-
-- hosts: localhost
-  become: no
-  gather_facts: no
-  vars:
-    provider_id: 99000000000004
-  roles:
-    - { role: syncrou.manageiq-vmdb, when: manageiq is defined }
-    - { role: cloudforms-link-service, when: manageiq is defined }

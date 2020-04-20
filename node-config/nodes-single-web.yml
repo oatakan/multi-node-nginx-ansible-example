@@ -8,6 +8,8 @@ providers:
 
 nodes:
   - name: lamp-web3
+    role: webserver
+    app_name: lamp_multi_node
     networks:
     - name: mgmt
       ip: 192.168.1.81
@@ -26,13 +28,8 @@ nodes:
       dns_servers:
       - 192.168.1.254
       - 8.8.4.4
-    customvalues:
-    - key: role
-      value: webserver
-    - key: app_name
-      value: lamp_multi_node
     memory: 2048
     cpu: 1
-    template: centos74-x64-bigdisk
+    template: centos77-x64-v1
     snapshot_src: Linked
     linked_clone: True
