@@ -1,4 +1,4 @@
-- hosts: '*tag_role_webserver'
+- hosts: '*_role_webserver'
   become: yes
   serial: 1
 
