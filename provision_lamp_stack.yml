@@ -20,6 +20,9 @@
   vars:
     http_port: "{{':'}}80"
     nginx_test_message: Welcome to nginx
+    external_port: "{{ kube_service_ports['svc-80'] | default('80') }}"
+
+    application_url: http://{{ ansible_host }}:{{ external_port }}/
 
   pre_tasks:
   - name: Populate backend servers
@@ -34,7 +37,7 @@
   # smoke test that haproxy is serving requests
   - name: proper response from haproxy is received
     uri:
-      url: http://{{ ansible_host }}/
+      url: "{{ application_url }}"
       return_content: yes
     register: response
     until: "'This is the sites URL' in response.content"
