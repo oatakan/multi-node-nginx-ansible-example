@@ -8,42 +8,48 @@
   post_tasks:
     - name: add hosts to webserver group
       add_host:
-        name: "{{ item.tagged_instances[0].public_ip }}"
-        ansible_host: "{{ item.tagged_instances[0].public_ip }}"
+        name: "{{ item.instances[0].public_ip_address }}"
+        ansible_host: "{{ item.instances[0].public_ip_address }}"
         groups: tag_role_webserver,tag_app_lamp_multi_node
-      with_items: "{{ instances.results }}"
-      when: ('lamp_multi_node' in item.invocation.module_args.instance_tags.app) and ('webserver' in item.invocation.module_args.instance_tags.role)
+      loop: "{{ instances.results }}"
+      when:
+        - ('lamp_multi_node' in item.instances[0].tags.app)
+        - ('webserver' in item.instances[0].tags.role)
       changed_when: no
       tags:
         - addhost
 
     - name: add hosts to dbserver group
       add_host:
-        name: "{{ item.tagged_instances[0].public_ip }}"
-        ansible_host: "{{ item.tagged_instances[0].public_ip }}"
+        name: "{{ item.instances[0].public_ip_address }}"
+        ansible_host: "{{ item.instances[0].public_ip_address }}"
         groups: tag_role_dbserver,tag_app_lamp_multi_node
-      with_items: "{{ instances.results }}"
-      when: ('lamp_multi_node' in item.invocation.module_args.instance_tags.app) and ('dbserver' in item.invocation.module_args.instance_tags.role)
+      loop: "{{ instances.results }}"
+      when:
+        - ('lamp_multi_node' in item.instances[0].tags.app)
+        - ('dbserver' in item.instances[0].tags.role)
       changed_when: no
       tags:
         - addhost
 
     - name: add hosts to lbserver group
       add_host:
-        name: "{{ item.tagged_instances[0].public_ip }}"
-        ansible_host: "{{ item.tagged_instances[0].public_ip }}"
+        name: "{{ item.instances[0].public_ip_address }}"
+        ansible_host: "{{ item.instances[0].public_ip_address }}"
         groups: tag_role_lbserver,tag_app_lamp_multi_node
-      with_items: "{{ instances.results }}"
-      when: ('lamp_multi_node' in item.invocation.module_args.instance_tags.app) and ('lbserver' in item.invocation.module_args.instance_tags.role)
+      loop: "{{ instances.results }}"
+      when:
+        - ('lamp_multi_node' in item.instances[0].tags.app)
+        - ('lbserver' in item.instances[0].tags.role)
       changed_when: no
       tags:
         - addhost
 
     - name: wait for connection
       wait_for_connection:
-      delegate_to: "{{ item.tagged_instances[0].public_ip }}"
-      with_items: "{{ instances.results }}"
-      when: ('lamp_multi_node' in item.invocation.module_args.instance_tags.app)
+      delegate_to: "{{ item.instances[0].public_ip_address }}"
+      loop: "{{ instances.results }}"
+      when: ('lamp_multi_node' in item.instances[0].tags.app)
       changed_when: no
       tags:
         - addhost
