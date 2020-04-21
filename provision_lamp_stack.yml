@@ -27,7 +27,7 @@
   pre_tasks:
   - name: Populate backend servers
     set_fact:
-      haproxy_backend_servers: "{{ haproxy_backend_servers|default([]) + [ {'name': hostvars[item].ansible_hostname, 'address': (hostvars[item].ansible_default_ipv4.address | default(hostvars[item].ansible_host)) + http_port } ] }}"
+      haproxy_backend_servers: "{{ haproxy_backend_servers|default([]) + [ {'name': hostvars[item].ansible_hostname, 'address': (hostvars[item].ansible_default_ipv4.address | default(hostvars[item].ansible_private_ip) | default(hostvars[item].ansible_host)) + http_port } ] }}"
     loop: "{{ groups.tag_role_webserver | default(groups.vmware_tag_role_webserver) | default(groups.label_role_webserver) }}"
 
   roles:
