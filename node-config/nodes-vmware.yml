@@ -31,7 +31,7 @@ nodes:
       password: '{{ ansible_password | default(ansible_ssh_password) | b64encode | b64decode }}'
     memory: 2048
     cpu: 1
-    template: centos77-x64-v1
+    template: centos81-x64-v1
     snapshot_src: Linked
     linked_clone: True
   - name: lamp-web1
@@ -58,7 +58,7 @@ nodes:
       password: '{{ ansible_password | default(ansible_ssh_password) | b64encode | b64decode }}'
     memory: 2048
     cpu: 1
-    template: centos77-x64-v1
+    template: centos81-x64-v1
     snapshot_src: Linked
     linked_clone: True
   - name: lamp-web2
@@ -85,7 +85,7 @@ nodes:
       password: '{{ ansible_password | default(ansible_ssh_password) | b64encode | b64decode }}'
     memory: 2048
     cpu: 1
-    template: centos77-x64-v1
+    template: centos81-x64-v1
     snapshot_src: Linked
     linked_clone: True
   - name: lamp-haproxy
@@ -112,6 +112,6 @@ nodes:
       password: '{{ ansible_password | default(ansible_ssh_password) | b64encode | b64decode }}'
     memory: 2048
     cpu: 1
-    template: centos77-x64-v1
+    template: centos81-x64-v1
     snapshot_src: Linked
     linked_clone: True
