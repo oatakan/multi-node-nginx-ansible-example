@@ -8,9 +8,8 @@
   become: yes
   vars:
     nginx_vhosts:
-      listen: "80"
-      server_name: "{{ ansible_hostname | default('localhost') }}"
-      return: "301 https://{{ ansible_hostname | default('localhost') }}$request_uri"
+      - listen: "80"
+        server_name: "{{ ansible_hostname | default('localhost') }}"
   roles:
   - geerlingguy.nginx
 
