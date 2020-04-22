@@ -7,10 +7,10 @@
 		<h1>{{ html_title | default ('Multi LAMP Demo') }}</h1>
 		
 		<h3>This is the servers IP address:</h3>
-		<div>{{ ansible_host }}</div>
+		<div>{{ ansible_private_ip | default(ansible_host) }}</div>
 		
 		<h3>This is the sites URL</h3>
-		<div id="site_url">http://{{ ansible_host }}</div>
+		<div id="site_url">http://{{ ansible_host }}:{{ kube_service_ports['svc-80'] | default('80') }}</div>
 	
 	</body>
 	
