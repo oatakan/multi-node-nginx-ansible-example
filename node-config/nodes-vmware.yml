@@ -31,7 +31,7 @@ nodes:
       password: '{{ ansible_password | default(ansible_ssh_password) | b64encode | b64decode }}'
     memory: 2048
     cpu: 1
-    template: "{{ template_name | default('rhel76-x64-bigdisk_v1') }}"
+    template: "{{ template_name | default('centos81-x64-v1') }}"
     snapshot_src: Linked
     linked_clone: True
   - name: lamp-web1
@@ -58,7 +58,7 @@ nodes:
       password: '{{ ansible_password | default(ansible_ssh_password) | b64encode | b64decode }}'
     memory: 2048
     cpu: 1
-    template: "{{ template_name | default('rhel82-x64-v1') }}"
+    template: "{{ template_name | default('rhel76-x64-bigdisk_v1') }}"
     snapshot_src: Linked
     linked_clone: True
   - name: lamp-web2
