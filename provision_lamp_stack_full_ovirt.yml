@@ -1,0 +1,4 @@
+---
+- import_playbook: lamp_infra_ovirt.yml
+
+- import_playbook: provision_lamp_stack.yml
