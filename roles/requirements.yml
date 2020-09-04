@@ -17,6 +17,8 @@
   version: origin/master
   name: oatakan.openshift-add-auth-config
 
+- src: oatakan.rhel_upgrade
+
 - src: geerlingguy.nginx
 
 - src: geerlingguy.mysql

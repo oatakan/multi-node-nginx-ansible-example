@@ -1,0 +1,82 @@
+- hosts: '*_role_secondary'
+  become: yes
+
+  pre_tasks:
+    # dba
+    - name: stop hana
+      command: sapctlhdbstop
+
+  roles:
+    # sys admin
+    - rhel_os_update
+
+  post_tasks:
+    # dba
+    - name: start hana
+      command: sapctlhdbstart
+
+    # dba
+    - name: test to see if insync
+      command: hdbnsutil --sr_state
+      register: sap_check
+      until: ('complete' in sap_check.stdout)
+
+    # basis admin
+    - name: suspend db connection
+      file:
+        path: /path/to/file
+        state: touched
+      delegate_to: "{{ sap_app_server }}"
+
+    # basis admin
+    - name: wait for 30 seconds
+      pause:
+        seconds: 30
+
+    # sys admin
+    - name: flip vip failover to secondary
+      pcs:
+
+    # dba
+    - name: failover to secondary
+      command: hdbnsutil --sr_takeover
+
+    # dba
+    - name: wait for 5 seconds
+      pause:
+        seconds: 5
+
+    # basis admin
+    - name: unsuspend db connection
+      file:
+        path: /path/to/file
+        state: absent
+      delegate_to: "{{ sap_app_server }}"
+
+- hosts: '*_role_primary'
+  become: yes
+
+  pre_tasks:
+    #dba
+    - name: stop hana
+      command: sapctlhdbstop
+
+  roles:
+    # sys admin
+    - rhel_os_update
+
+  post_tasks:
+    # dba
+    - name: register primary as secondary
+      command: hdbnsutil --sr_register
+
+    # dba
+    - name: start hana
+      command: sapctlhdbstart
+
+    # dba
+    - name: test to see if insync
+      command: hdbnsutil --sr_state
+      register: sap_check
+      until: ('complete' in sap_check.stdout)
+      failed_when: false

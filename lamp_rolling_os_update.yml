@@ -1,0 +1,34 @@
+- hosts: '*_role_webserver'
+  become: yes
+  serial: 1
+
+  pre_tasks:
+  - name: disable backend server and drop open sessions to it
+    haproxy:
+      state: disabled
+      host: '{{ ansible_hostname }}'
+      backend: habackend
+      socket: /var/lib/haproxy/stats
+      shutdown_sessions: yes
+      wait: yes
+    delegate_to: "{{ item }}"
+    with_items: "{{ groups.tag_role_lbserver | default(groups.vmware_tag_role_lbserver) }}"
+
+  roles:
+  - oatakan.rhel_upgrade
+
+  post_tasks:
+  - name: create index.html from template
+    template:
+      src: index.html.j2
+      dest: /usr/share/nginx/html/index.html
+
+  - name: disable backend server and drop open sessions to it
+    haproxy:
+      state: enabled
+      host: '{{ ansible_hostname }}'
+      backend: habackend
+      socket: /var/lib/haproxy/stats
+      wait: yes
+    delegate_to: "{{ item }}"
+    with_items: "{{ groups.tag_role_lbserver | default(groups.vmware_tag_role_lbserver) }}"
