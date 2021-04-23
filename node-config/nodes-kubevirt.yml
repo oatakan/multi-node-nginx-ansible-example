@@ -4,6 +4,9 @@ nodes:
   - name: lamp-db
     role: dbserver
     app_name: lamp_multi_node
+    disks:
+      - name: lamp-db-disk0
+        size: 15GiB
     domain: home.ad
     memory: 2048
     cpu: 1
