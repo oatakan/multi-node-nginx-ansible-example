@@ -28,10 +28,10 @@ nodes:
       dns_servers:
       - 8.8.8.8
       - 8.8.4.4
-      password: '{{ ansible_password | default(ansible_ssh_password) | b64encode | b64decode }}'
+      password: '{{ ansible_password | default(ansible_ssh_password) }}'
     memory: 2048
     cpu: 1
-    template: "{{ template_name | default('centos81-x64-v1') }}"
+    template: "{{ infra_template_name | default('centos84-x64-v1') }}"
     snapshot_src: Linked
     linked_clone: True
   - name: lamp-web1
@@ -55,10 +55,10 @@ nodes:
       dns_servers:
       - 8.8.8.8
       - 8.8.4.4
-      password: '{{ ansible_password | default(ansible_ssh_password) | b64encode | b64decode }}'
+      password: '{{ ansible_password | default(ansible_ssh_password) }}'
     memory: 2048
     cpu: 1
-    template: "{{ template_name | default('rhel76-x64-bigdisk_v1') }}"
+    template: "{{ infra_template_name | default('rhel78-x64-v1') }}"
     snapshot_src: Linked
     linked_clone: True
   - name: lamp-web2
@@ -82,10 +82,10 @@ nodes:
       dns_servers:
       - 8.8.8.8
       - 8.8.4.4
-      password: '{{ ansible_password | default(ansible_ssh_password) | b64encode | b64decode }}'
+      password: '{{ ansible_password | default(ansible_ssh_password) }}'
     memory: 2048
     cpu: 1
-    template: "{{ template_name | default('rhel82-x64-v1') }}"
+    template: "{{ infra_template_name | default('rhel84-x64-v1') }}"
     snapshot_src: Linked
     linked_clone: True
   - name: lamp-haproxy
@@ -112,6 +112,6 @@ nodes:
       password: '{{ ansible_password | default(ansible_ssh_password) | b64encode | b64decode }}'
     memory: 2048
     cpu: 1
-    template: "{{ template_name | default('centos75-x64-bigdisk_v4') }}"
+    template: "{{ infra_template_name | default('centos78-x64-v1') }}"
     snapshot_src: Linked
     linked_clone: True

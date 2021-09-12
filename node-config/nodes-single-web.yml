@@ -30,6 +30,6 @@ nodes:
       - 8.8.4.4
     memory: 2048
     cpu: 1
-    template: centos77-x64-v1
+    template: "{{ infra_template_name | default('centos84-x64-v1') }}"
     snapshot_src: Linked
     linked_clone: True

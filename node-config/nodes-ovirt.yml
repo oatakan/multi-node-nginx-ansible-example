@@ -22,10 +22,10 @@ nodes:
     - 192.168.1.254
     - 8.8.4.4
     user_name: root
-    root_password: '{{ ansible_password | default(ansible_ssh_password) | default("password") | b64encode | b64decode }}'
+    root_password: '{{ ansible_password | default(ansible_ssh_password) | default("password") }}'
     memory: 2048
     cpu: 1
-    template: "{{ template_name | default('centos81-x64-v1') }}"
+    template: "{{ infra_template_name | default('centos84-x64-v1') }}"
   - name: lamp-web1
     role: webserver
     app_name: lamp_multi_node
@@ -44,10 +44,10 @@ nodes:
     - 192.168.1.254
     - 8.8.4.4
     user_name: root
-    root_password: '{{ ansible_password | default(ansible_ssh_password) | default("password") | b64encode | b64decode }}'
+    root_password: '{{ ansible_password | default(ansible_ssh_password) | default("password") }}'
     memory: 2048
     cpu: 1
-    template: "{{ template_name | default('centos81-x64-v1') }}"
+    template: "{{ infra_template_name | default('centos84-x64-v1') }}"
   - name: lamp-web2
     role: webserver
     app_name: lamp_multi_node
@@ -66,10 +66,10 @@ nodes:
     - 192.168.1.254
     - 8.8.4.4
     user_name: root
-    root_password: '{{ ansible_password | default(ansible_ssh_password) | default("password") | b64encode | b64decode }}'
+    root_password: '{{ ansible_password | default(ansible_ssh_password) | default("password") }}'
     memory: 2048
     cpu: 1
-    template: "{{ template_name | default('centos81-x64-v1') }}"
+    template: "{{ infra_template_name | default('centos84-x64-v1') }}"
   - name: lamp-haproxy
     role: lbserver
     app_name: lamp_multi_node
@@ -88,7 +88,7 @@ nodes:
     - 192.168.1.254
     - 8.8.4.4
     user_name: root
-    root_password: '{{ ansible_password | default(ansible_ssh_password) | default("password") | b64encode | b64decode }}'
+    root_password: '{{ ansible_password | default(ansible_ssh_password) | default("password") }}'
     memory: 2048
     cpu: 1
-    template: "{{ template_name | default('centos81-x64-v1') }}"
+    template: "{{ infra_template_name | default('centos84-x64-v1') }}"
